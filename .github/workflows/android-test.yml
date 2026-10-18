@@ -2,16 +2,6 @@ name: Android APK Test
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "scenes/**"
-      - "characters/**"
-      - "stages/**"
-      - "UI/**"
-      - "project.godot"
-      - "default_env.tres"
-      - "export_presets.cfg"
-      - ".github/workflows/android-test.yml"
 
 jobs:
   build:
@@ -19,13 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download Godot 3.5.3 Android build image
-        run: docker pull barichello/godot-ci:3.5.3
+        run: docker pull barichello/godot-ci:3.6.2
       - name: Import project resources
-        run: docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.5.3 godot --path . --editor --quit
+        run: docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.6.2 godot --path . --editor --quit
       - name: Export Android debug APK
         run: |
           mkdir -p build
-          docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.5.3 godot --path . --export-debug Android build/InfinityMOBA-Test.apk
+          docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.6.2 godot --path . --export-debug Android build/InfinityMOBA-Test.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
