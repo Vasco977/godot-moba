@@ -2,13 +2,16 @@ name: Android APK Test
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/android-test.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download Godot 3.5.3 Android build image
+      - name: Download Godot 3.6.2 Android build image
         run: docker pull barichello/godot-ci:3.6.2
       - name: Import project resources
         run: docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.6.2 godot --path . --editor --quit
