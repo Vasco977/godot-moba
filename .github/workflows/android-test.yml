@@ -16,16 +16,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:3.5.3
     steps:
       - uses: actions/checkout@v4
-      - name: Create output directory
-        run: mkdir -p build
-      - name: Import resources
-        run: godot --path . --editor --quit --verbose
+      - name: Download Godot 3.5.3 Android build image
+        run: docker pull barichello/godot-ci:3.5.3
+      - name: Import project resources
+        run: docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.5.3 godot --path . --editor --quit
       - name: Export Android debug APK
-        run: godot --path . --export-debug Android build/InfinityMOBA-Test.apk
+        run: |
+          mkdir -p build
+          docker run --rm -v "$PWD:/app" -w /app barichello/godot-ci:3.5.3 godot --path . --export-debug Android build/InfinityMOBA-Test.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
