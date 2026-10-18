@@ -1,0 +1,34 @@
+name: Android APK Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scenes/**"
+      - "characters/**"
+      - "stages/**"
+      - "UI/**"
+      - "project.godot"
+      - "default_env.tres"
+      - "export_presets.cfg"
+      - ".github/workflows/android-test.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:3.5.3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create output directory
+        run: mkdir -p build
+      - name: Import resources
+        run: godot --path . --editor --quit --verbose
+      - name: Export Android debug APK
+        run: godot --path . --export-debug Android build/InfinityMOBA-Test.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: InfinityMOBA-Test-APK
+          path: build/InfinityMOBA-Test.apk
+          if-no-files-found: error
