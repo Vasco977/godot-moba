@@ -1,4 +1,6 @@
 extends DirectionalLight
 
 func _ready():
-	self.queue_free()
+	# Keep the sun enabled for mobile builds (baked lightmaps are absent).
+	light_energy = 1.35
+	shadow_enabled = true
